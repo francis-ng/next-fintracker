@@ -4,7 +4,7 @@ import { Button, Link, Paper, Stack, TextField } from "@mui/material"
 import NextLink from 'next/link';
 import Head from "next/head"
 
-export default () => {
+export default function Register() {
   const [RegUserName, setRegUserName] = useState('');
   const [RegPassword, setRegPassword] = useState('');
   const [RegPasswordVerify, setRegPasswordVerify] = useState('');

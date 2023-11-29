@@ -5,7 +5,7 @@ import { Stack } from '@mui/system';
 import NextLink from 'next/link';
 import Header from '@/components/header';
 
-export default () => {
+export default function Login () {
   const [LoginUserName, setLoginUserName] = useState('');
   const [LoginPassword, setLoginPassword] = useState('');
 

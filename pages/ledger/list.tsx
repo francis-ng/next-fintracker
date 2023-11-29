@@ -9,7 +9,7 @@ import NextLink from 'next/link';
 import Head from "next/head"
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
-export default () => {
+export default function LedgerList() {
   const [VisibleItems, setVisibleItems] = useState(0);
   const [displayedLedgers, setDisplayedLedgers] = useState([]);
   const ledgers = useRef([]);
