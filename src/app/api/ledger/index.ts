@@ -1,7 +1,7 @@
 import { Ledger } from "@/types";
 import { MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { authorize } from "../user/login";
+import { authorize } from "../user/login/route";
 
 async function addLedger(data: Ledger, user: string, res: NextApiResponse) {
   const client = new MongoClient(process.env.MONGODB_URI as string);

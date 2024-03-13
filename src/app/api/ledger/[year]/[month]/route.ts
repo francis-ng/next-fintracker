@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { authorize } from "../../user/login";
+import { authorize } from "../../../user/login/route";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = authorize(req);

@@ -14,9 +14,11 @@ export default function LedgerList() {
   const [displayedLedgers, setDisplayedLedgers] = useState([]);
   const ledgers = useRef([]);
 
-  useEffect(() => {
+  const updateLedgerList = () => {
 
-  }, [])
+  };
+
+  useEffect(updateLedgerList, [])
 
   const renderRow = (props: ListChildComponentProps) => {
     const { index, style } = props;
