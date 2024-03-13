@@ -1,4 +1,4 @@
-
+'use client'
 import { useState, useRef, useEffect } from 'react';
 import Header from "@/components/header";
 import { Button, Link, Paper, Stack, TextField } from "@mui/material";
