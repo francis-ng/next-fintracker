@@ -1,41 +1,37 @@
 import { MongoClient } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
 import { authorize } from "../../../user/login/route";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function GET(req: Request) {
   const user = authorize(req);
   if (!user) {
-    return res.status(401).send(null);
+    return new Response(null, {status:401});
   }
 
-  if (req.method == 'GET') {
-    let { yearQ, monthQ } = req.query;
-    const year = parseInt(yearQ as string);
-    const month = parseInt(monthQ as string);
-    const client = new MongoClient(process.env.MONGODB_URI as string);
-    const ledgers = client.db(process.env.MONGO_DB).collection(process.env.LEDGER_COLLECTION as string);
+  const { searchParams } = new URL(req.url)
+  const yearQ = searchParams.get('year') as string;
+  const monthQ = searchParams.get('month') as string;
+  const year = parseInt(yearQ as string);
+  const month = parseInt(monthQ as string);
+  const client = new MongoClient(process.env.MONGODB_URI as string);
+  const ledgers = client.db(process.env.MONGO_DB).collection(process.env.LEDGER_COLLECTION as string);
 
-    let type = 'regular';
-    if (year == 0 && month == 0) {
-      type = 'fixed';
-    }
-
-    const ledger = ledgers.findOne({
-      Year: year,
-      Month: month,
-      Type: type,
-      Owner: user
-    });
-
-    client.close();
-
-    if (!ledger) {
-      return res.status(404).send(null);
-    }
-
-    return res.status(200).json(ledger);
+  let type = 'regular';
+  if (year == 0 && month == 0) {
+    type = 'fixed';
   }
-  else {
-    return res.status(405).setHeader('Allow', 'GET').send(null);
+
+  const ledger = ledgers.findOne({
+    Year: year,
+    Month: month,
+    Type: type,
+    Owner: user
+  });
+
+  client.close();
+
+  if (!ledger) {
+    return new Response(null, {status:404});
   }
+
+  return Response.json(ledger);
 };

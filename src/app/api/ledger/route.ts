@@ -3,7 +3,14 @@ import { MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { authorize } from "../user/login/route";
 
-async function addLedger(data: Ledger, user: string, res: NextApiResponse) {
+// ADD
+export async function POST(req: Request) {
+  const user = authorize(req);
+  if (!user) {
+    return new Response(null, {status: 401});
+  }
+  const data = await req.json();
+
   const client = new MongoClient(process.env.MONGODB_URI as string);
   const ledgers = client.db(process.env.MONGO_DB).collection(process.env.LEDGER_COLLECTION as string);
 
@@ -13,16 +20,23 @@ async function addLedger(data: Ledger, user: string, res: NextApiResponse) {
   const result = await ledgers.insertOne(data);
 
   client.close();
-  return res.status(200).json(result);
+  return Response.json(result);
 }
 
-async function updateLedger(data: Ledger, user: string, res: NextApiResponse) {
+// UPDATE
+export async function PUT(req: Request) {
+  const user = authorize(req);
+  if (!user) {
+    return new Response(null, {status: 401});
+  }
+  const data = await req.json();
+
   const client = new MongoClient(process.env.MONGODB_URI as string);
   const ledgers = client.db(process.env.MONGO_DB).collection(process.env.LEDGER_COLLECTION as string);
 
   const ledger = ledgers.findOne({_id: data._id});
   if (!ledger) {
-    return res.status(404).send(null);
+    return new Response(null, {status: 404});
   }
 
   data.UpdatedAt = new Date();
@@ -32,40 +46,26 @@ async function updateLedger(data: Ledger, user: string, res: NextApiResponse) {
   );
 
   client.close();
-  return res.status(200).json(result);
+  return Response.json(result);
 }
 
-async function deleteLedger(data: Ledger, user: string, res: NextApiResponse) {
+export async function DELETE(req: Request) {
+  const user = authorize(req);
+  if (!user) {
+    return new Response(null, {status: 401});
+  }
+  const data = await req.json();
+
   const client = new MongoClient(process.env.MONGODB_URI as string);
   const ledgers = client.db(process.env.MONGO_DB).collection(process.env.LEDGER_COLLECTION as string);
 
   const ledger = ledgers.findOne({_id: data._id});
   if (!ledger) {
-    return res.status(404).send(null);
+    return new Response(null, {status: 404});
   }
 
   await ledgers.deleteOne(data);
 
   client.close();
-  return res.status(200).send(null);
+  return new Response(null);
 }
-
-export default async function handler(req : NextApiRequest, res: NextApiResponse) {
-  const user = authorize(req);
-  if (!user) {
-    return res.status(401).send(null);
-  }
-
-  if (req.method === 'POST') {
-    await addLedger(req.body, user, res);
-  }
-  else if (req.method === 'PUT') {
-    await updateLedger(req.body, user, res);
-  }
-  else if (req.method === 'DELETE') {
-    await deleteLedger(req.body, user, res);
-  }
-  else {
-    return res.status(405).setHeader('Allow', 'POST,PUT,DELETE').send(null);
-  }
-};
