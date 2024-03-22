@@ -1,7 +1,5 @@
 'use client'
 import { useState } from 'react';
-import Header from "@/components/header"
-import { Button, Link, Paper, Stack, TextField } from "@mui/material"
 import NextLink from 'next/link';
 import Head from "next/head"
 
@@ -15,7 +13,6 @@ export default function Register() {
       <Head>
         <title>FinTracker - Register</title>
       </Head>
-      <Header />
       <Paper className='p-4'>
         <form>
           <Stack spacing={2} textAlign='center'>

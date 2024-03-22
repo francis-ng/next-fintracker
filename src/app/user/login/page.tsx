@@ -1,10 +1,7 @@
 'use client'
 import { useState } from 'react';
 import Head from 'next/head'
-import { Button, Link, Paper, TextField } from '@mui/material';
-import { Stack } from '@mui/system';
 import NextLink from 'next/link';
-import Header from '@/components/header';
 
 export default function Login () {
   const [LoginUserName, setLoginUserName] = useState('');
@@ -15,7 +12,6 @@ export default function Login () {
       <Head>
         <title>FinTracker - Login</title>
       </Head>
-      <Header />
       <Paper className='p-4'>
         <form>
           <Stack spacing={2} textAlign='center'>
