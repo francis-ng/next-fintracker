@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 import { FTPayload } from "@/types";
 
 
-export default async function POST(req : Request) {
+export async function POST(req : Request) {
   const client = new MongoClient(process.env.MONGODB_URI as string);
   const users = client.db(process.env.MONGO_DB).collection(process.env.USER_COLLECTION as string);
   const data = await req.json();

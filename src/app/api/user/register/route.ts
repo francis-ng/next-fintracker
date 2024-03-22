@@ -2,7 +2,7 @@ import * as argon2 from "argon2";
 import { sign } from "jsonwebtoken";
 import { MongoClient } from "mongodb";
 
-export default async function POST(req : Request) {
+export async function POST(req : Request) {
   const HASHVERSION = 2;
 
   const client = new MongoClient(process.env.MONGODB_URI as string);

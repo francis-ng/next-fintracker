@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
-import { authorize } from "../../../user/login/route";
+import { authorize } from "../../../../../util/auth";
 
-export default async function GET(req: Request) {
+export async function GET(req: Request) {
   const user = authorize(req);
   if (!user) {
     return new Response(null, {status:401});

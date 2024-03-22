@@ -1,11 +1,10 @@
 import * as argon2 from "argon2";
-import { sign, verify } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import { MongoClient } from "mongodb";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { FTPayload } from "@/types";
 
-export default async function POST(req : Request) {
+
+export async function POST(req : Request) {
   const HASHVERSION = 2;
 
   const client = new MongoClient(process.env.MONGODB_URI as string);
@@ -32,21 +31,3 @@ export default async function POST(req : Request) {
     return new Response(null, {status:403});
   }
 };
-
-export function authorize(req: Request) {
-  const headerList = headers();
-  let token = headerList.get('authorization') ?? '';
-  token = token.replace('Bearer ', '');
-  if (token == '') {
-    return null;
-  }
-  else {
-    try {
-      const payload = verify(token, process.env.JWT_REFRESHKEY as string) as FTPayload;
-      return payload.user;
-    }
-    catch (err) {
-      return null;
-    }
-  }
-}
