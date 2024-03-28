@@ -1,28 +1,24 @@
-'use client'
-import { useState } from 'react';
-import Head from 'next/head'
-import NextLink from 'next/link';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Button, Input } from '@nextui-org/react';
+import { submitLogin } from '@/app/api/user/login';
+
+export const metadata: Metadata = {
+  title: 'FinTracker - Login'
+}
 
 export default function Login () {
-  const [LoginUserName, setLoginUserName] = useState('');
-  const [LoginPassword, setLoginPassword] = useState('');
-
   return (
-    <>
-      <Head>
-        <title>FinTracker - Login</title>
-      </Head>
-      <Paper className='p-4'>
-        <form>
-          <Stack spacing={2} textAlign='center'>
-            <TextField label='User name' value={LoginUserName} onChange={(e) => setLoginUserName(e.target.value)} required />
-            <TextField label='Password' value={LoginPassword} onChange={(e) => setLoginPassword(e.target.value)} type='password' required />
-            <Button variant='contained' type='submit'>Login</Button>
-            <Link component={NextLink} href='/user/changepass'>Change password and login</Link>
-            <Link component={NextLink} href='/user/register'>Click here to register</Link>
-          </Stack>
-        </form>
-      </Paper>
-    </>
+    <div className='container'>
+      <form action={submitLogin}>
+        <div className='grid grid-cols-1 gap-4'>
+          <Input label='User name' name='username' required />
+          <Input label='Password' name='password' type='password' required />
+          <Button color='primary' type='submit'>Login</Button>
+          <Link href='/user/changepass'>Change password and login</Link>
+          <Link href='/user/register'>Click here to register</Link>
+        </div>
+      </form>
+    </div>
   )
 };

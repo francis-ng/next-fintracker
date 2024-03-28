@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NextUIProvider } from "@nextui-org/react";
+import { Providers } from "./providers";
 import "./globals.css";
 import Header from "../components/header";
 
@@ -17,13 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <NextUIProvider>
-      <html lang="en">
-        <body className={`${inter.className} dark text-foreground bg-background`}>
-          <Header />
-          {children}
+    <html lang="en" className="dark">
+        <body className={`${inter.className}`}>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
         </body>
       </html>
-    </NextUIProvider>
   );
 }

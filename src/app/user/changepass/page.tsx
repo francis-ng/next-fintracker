@@ -1,29 +1,24 @@
-'use client'
-import { useState } from 'react';
 import Link from 'next/link';
-import Head from "next/head"
+import { Metadata } from "next";
+import { Button, Input } from '@nextui-org/react';
+
+export const metadata: Metadata = {
+  title: 'FinTracker - Change Password'
+}
 
 export default function ChangePassword() {
-  const [UserName, setUserName] = useState('');
-  const [Password, setPassword] = useState('');
-  const [NewPassword, setNewPassword] = useState('');
-  const [NewPasswordVerify, setNewPasswordVerify] = useState('');
-
   return (
-    <>
-      <Head>
-        <title>FinTracker - Change Password</title>
-      </Head>
-      <div className='container px-4'>
-          <Stack spacing={2} textAlign='center'>
-            <TextField label="User name" value={UserName} onChange={(e) => setUserName(e.target.value)} required />
-            <TextField label="Password" type="password" value={Password} onChange={(e) => setPassword(e.target.value)} required />
-            <TextField label="New Password" type="password" value={NewPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-            <TextField label="Verify new password" type="password" value={NewPasswordVerify} onChange={(e) => setNewPasswordVerify(e.target.value)} required />
-            <Button variant='contained' type='submit'>Update</Button>
-            <Link href='/user/login'>Return to login</Link>
-          </Stack>
-      </div>
-    </>
+    <div className='container'>
+      <form>
+        <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
+          <Input label="User name" name='username' required />
+          <Input label="Password" name='password' type="password" required />
+          <Input label="New Password" name='newpass' type="password" required />
+          <Input label="Verify new password" name='verifyPass' type="password" required />
+          <Button color='primary' type='submit'>Update</Button>
+          <Link href='/user/login'>Return to login</Link>
+        </div>
+      </form>
+    </div>
   )
 }
