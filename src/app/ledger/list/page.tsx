@@ -1,54 +1,31 @@
-'use client'
-import { useState, useRef, useEffect } from 'react';
-import Header from "@/components/header";
-import { Button, Link, Paper, Stack, TextField } from "@mui/material";
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import NextLink from 'next/link';
-import Head from "next/head"
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import Link from 'next/link';
+import { Metadata } from "next";
+import { listLedgers } from '@/util/ledger/list'
+import YearFilter from '@/components/ledger/list/YearFilter';
+import { Button } from '@nextui-org/react';
+import LedgerList from '@/components/ledger/list/LedgerList';
 
-export default function LedgerList() {
-  const [VisibleItems, setVisibleItems] = useState(0);
-  const [displayedLedgers, setDisplayedLedgers] = useState([]);
-  const ledgers = useRef([]);
+export const metadata: Metadata = {
+  title: 'FinTracker - Ledgers'
+}
 
-  const updateLedgerList = () => {
-
-  };
-
-  useEffect(updateLedgerList, [])
-
-  const renderRow = (props: ListChildComponentProps) => {
-    const { index, style } = props;
-
-    return (
-      <ListItem style={style} key={index} component="div" disablePadding>
-        <ListItemButton>
-          <ListItemText primary={displayedLedgers[index]} />
-        </ListItemButton>
-      </ListItem>
-    )
-  }
+async function LedgerFront() {
+  const ledgers = await listLedgers();
+  const years = ledgers
+                .map((item) => item.Year)
+                .filter((item, index, array) => array.indexOf(item) === index);
 
   return (
-    <>
-      <Head>
-        <title>FinTracker - Ledgers</title>
-      </Head>
-      <Header />
-      <Paper className='p-4'>
-        <FixedSizeList
-          height={960}
-          width={'80%'}
-          itemSize={46}
-          itemCount={VisibleItems}
-          overscanCount={5}
-        >
-          {renderRow}
-        </FixedSizeList>
-      </Paper>
-    </>
+    <div className='container'>
+      <div className='flex'>
+        <YearFilter years={years} />
+        <div className='grow' />
+        <Button color='primary' className='mx-2 w-32'>New</Button>
+        <Button color='default' className='w-32'>Fixed Items</Button>
+      </div>
+      <LedgerList ledgersSerial={JSON.stringify(ledgers)} />
+    </div>
   )
 }
+
+export default LedgerFront;

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Button, Input } from '@nextui-org/react';
-import { submitLogin } from '@/app/api/user/login';
+import { submitLogin } from '@/util/user/login';
 
 export const metadata: Metadata = {
   title: 'FinTracker - Login'

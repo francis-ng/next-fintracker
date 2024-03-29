@@ -4,7 +4,6 @@ import { sign } from "jsonwebtoken";
 import { MongoClient } from "mongodb";
 import { redirect } from "next/navigation";
 
-
 export async function submitLogin(formData: FormData) {
   const HASHVERSION = 2;
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from "next";
 import { Button, Input } from '@nextui-org/react';
-import { submitRegister } from '@/app/api/user/register';
+import { submitRegister } from '@/util/user/register';
 
 export const metadata: Metadata = {
   title: 'FinTracker - Register'
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Register() {
   return (
     <div className='container'>
-      <form>
+      <form action={submitRegister}>
         <div className='grid grid-cols-1 gap-4'>
           <Input label="User name" name='username' required />
           <Input label="Password" name='password' type="password" required />

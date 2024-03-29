@@ -1,3 +1,4 @@
+'use server'
 import * as argon2 from "argon2";
 import { sign } from "jsonwebtoken";
 import { MongoClient } from "mongodb";
