@@ -4,6 +4,9 @@ import { Tabs, Tab, Button } from '@nextui-org/react';
 import { useReducer } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
+import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
+import SaveIcon from '@/components/icons/SaveIcon';
+import { saveLedger } from '@/util/ledger';
 
 
 export interface LedgerAction {
@@ -55,23 +58,31 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
 }
 
 function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
-  const [ledgers, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
+  const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
 
   return (
     <div className='container'>
-      <div className='flex'>
+      <div className='flex p-1'>
         <Link href='/ledger/list'>
-          <Button color='default' className='w-32' aria-label='Back'>Back</Button>
+          <Button color='default' className='w-24'
+                  startContent={<LeftArrowIcon width={24} height={24}/>}
+                  aria-label='Back'>
+            Back
+          </Button>
         </Link>
         <div className='grow' />
-        <Button color='primary' className='w-32' aria-label='Save'>Save</Button>
+        <Button color='primary' className='w-32'
+                startContent={<SaveIcon width={24} height={24}/>}
+                onClick={() => saveLedger(ledger)} aria-label='Save'>
+          Save
+        </Button>
       </div>
-      <Tabs aria-label='Debit Credit' fullWidth={true} className='my-2'>
+      <Tabs aria-label='Debit Credit' fullWidth={true} className='my-2 p-1'>
         <Tab key="expenses" title="Expenses" className='flex-auto'>
-          <LedgerItemList items={ledgers.Debits} ledgerType='Debits' dispatcher={ledgersDispatcher} />
+          <LedgerItemList items={ledger.Debits} ledgerType='Debits' dispatcher={ledgersDispatcher} />
         </Tab>
         <Tab key="income" title="Income" className='flex-auto'>
-          <LedgerItemList items={ledgers.Credits} ledgerType='Credits' dispatcher={ledgersDispatcher} />
+          <LedgerItemList items={ledger.Credits} ledgerType='Credits' dispatcher={ledgersDispatcher} />
         </Tab>
       </Tabs>
     </div>

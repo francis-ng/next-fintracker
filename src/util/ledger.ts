@@ -1,12 +1,15 @@
 'use server'
-import { Ledger } from "@/types";
+import { auth } from "@/auth";
+import { Ledger, LedgerItem } from "@/types";
 import clientPromise from "@/util/mongoAdapter";
+import { ObjectId } from "mongodb";
 
 export async function listLedgers() {
+  const user = (await auth()).user.email;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
   const userLedgers = ledgers.find<Ledger>({
-    Owner: 'francis',
+    Owner: user,
     Type: 'regular'
   }, {
     projection: { Month: 1, Year: 1},
@@ -17,40 +20,87 @@ export async function listLedgers() {
 };
 
 export async function getLedger(year:number, month:number): Promise<Ledger> {
-  const owner = 'francis';
+  const user = (await auth()).user.email;
+  const owner = user;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
-  const fixedLedger = await ledgers.findOne({
-    Year: 0,
-    Month: 0,
-    Type: 'fixed',
+  const relLedgers = await ledgers.find<Ledger>({
+    $or: [
+      {Year: 0, Month: 0},
+      {Year: month === 1 ? year-1 : year, Month: month === 1 ? 12 : month-1},
+      {Year: year, Month: month}
+    ],
     Owner: owner
-  });
+  }).toArray();
 
+  // Fixed ledger
   if (year == 0 && month == 0) {
-    return fixedLedger;
-  }
-
-  const ledger = await ledgers.findOne({
-    Year: year,
-    Month: month,
-    Type: 'regular',
-    Owner: owner
-  });
-
-  if (ledger === null) {
-    return {
-      Owner: owner,
-      Type: 'regular',
-      Month: month,
-      Year: year,
-      UpdatedAt: new Date(),
-      Debits: fixedLedger.Debits,
-      Credits: fixedLedger.Credits,
+    if (relLedgers.length > 0 && relLedgers[0].Type === 'fixed') {
+      return relLedgers[0];
+    }
+    else {
+      return {
+        Owner: owner,
+        Type: 'fixed',
+        Month: 0,
+        Year: 0,
+        UpdatedAt: new Date(),
+        Debits: [],
+        Credits: []
+      };
     }
   }
-  else {
-    return ledger;
+
+  // Current month existing
+  if (relLedgers.length > 0 &&
+      relLedgers[relLedgers.length-1].Year === year &&
+      relLedgers[relLedgers.length-1].Month === month) {
+    return relLedgers[relLedgers.length-1];
+  }
+
+  const regex = /(\d+)\/(\d+)/gm
+  const continuedDebits: LedgerItem[] = [];
+  if (relLedgers.length > 0) {
+    for (const item of relLedgers[relLedgers.length-1].Debits) {
+      const match = regex.exec(item.Label);
+      if (match !== null && match[1] !== match[2]) {
+        const newLabel = item.Label.replace(match[0], `${parseInt(match[1])+1}/${match[2]}`);
+        continuedDebits.push({Label: newLabel, Amount: item.Amount});
+      }
+    }
+  }
+
+  // New
+  return {
+    Owner: owner,
+    Type: 'regular',
+    Month: month,
+    Year: year,
+    UpdatedAt: new Date(),
+    Debits: relLedgers.length > 0 ? relLedgers[0].Debits.concat(continuedDebits) : continuedDebits,
+    Credits: relLedgers.length > 0 ? relLedgers[0].Credits : []
   }
 };
+
+export async function saveLedger(ledger: Ledger) {
+  const client = await clientPromise;
+  const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
+
+  if (ledger.hasOwnProperty('_id')) {
+    // Update
+    console.log('Update')
+    const { _id, ...update } = ledger;
+    update.UpdatedAt = new Date();
+    const result = await ledgers.replaceOne({ _id: new ObjectId(ledger._id.toString()) }, update);
+    console.log(result)
+    return result;
+  }
+  else {
+    // Insert
+    console.log('Insert')
+    const result = await ledgers.insertOne(ledger);
+    console.log(result)
+    return result;
+  }
+}

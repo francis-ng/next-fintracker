@@ -4,6 +4,7 @@ import { useState, ChangeEvent, useRef } from "react";
 import { Button, Select, SelectItem, Listbox, ListboxItem } from '@nextui-org/react';
 import { monthName } from "@/util/dates";
 import Link from 'next/link';
+import PlusIcon from '@/components/icons/PlusIcon';
 
 
 function ListClient({ledgersSerial}: {ledgersSerial: string}) {
@@ -18,6 +19,20 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
     ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0]))
   );
 
+  function nextLedgerLink() {
+    const nextMonth = ledgers.current.length === 0 ?
+                      (new Date()).getMonth() + 1 :
+                      ledgers.current[0].Month === 12 ?
+                      1 :
+                      ledgers.current[0].Month + 1;
+    const nextYear = ledgers.current.length === 0 ?
+                      (new Date()).getFullYear() :
+                      ledgers.current[0].Month === 12 ?
+                      ledgers.current[0].Year + 1 :
+                      ledgers.current[0].Year;
+    return `/ledger/${nextYear}/${nextMonth}`;
+  }
+
   function yearChanged(event: ChangeEvent<HTMLSelectElement>) {
     setSelectedYear(event.target.value);
     setFilteredLedgers(
@@ -27,20 +42,24 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
 
   return (
     <div className='container'>
-      <div className='flex'>
-        {/* Action bar */}
-        <Select
-          selectedKeys={[selectedYear]}
-          label='Filter year'
-          className='max-w-xs'
-          onChange={yearChanged}
-        >
-          { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
-        </Select>
-        <div className='grow' />
-        <Button color='primary' className='mx-2 w-32' aria-label='New'>New</Button>
-        <Link href={`/ledger/0/0`}>
-          <Button color='default' className='w-32' aria-label='Fixed Items'>Fixed Items</Button>
+      {/* Action bar */}
+      <Select
+        selectedKeys={[selectedYear]}
+        label='Filter year'
+        className='w-full p-1 mb-2'
+        onChange={yearChanged}
+      >
+        { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
+      </Select>
+      <div className='flex p-1'>
+        <Link href={`/ledger/0/0`} className='flex-auto me-1'>
+          <Button color='default' className='w-full' aria-label='Fixed Items'>Fixed Items</Button>
+        </Link>
+        <Link href={nextLedgerLink()} className='flex-auto ms-1'>
+          <Button color='primary' className='w-full' aria-label='New'
+                  startContent={<PlusIcon width={18} height={18}/>}>
+            New
+          </Button>
         </Link>
       </div>
 

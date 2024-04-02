@@ -1,14 +1,22 @@
 import React from "react";
 import Logo from "./logo";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
+import { auth } from "@/auth";
+import { SignOut } from "./AuthButtons";
 
-export default function Header() {
+export default async function Header() {
+  const session = await auth();
+
   return (
     <Navbar maxWidth="full">
       <NavbarBrand>
         <Logo />
         <p className="font-bold text-inherit">FinTracker</p>
       </NavbarBrand>
+      <NavbarContent justify="end">
+        {session?.user?.name}
+        { session && <SignOut /> }
+      </NavbarContent>
     </Navbar>
   )
 }

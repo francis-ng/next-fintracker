@@ -6,6 +6,7 @@ export default function Home() {
       <Link href='https://makerkit.dev/blog/tutorials/nextjs13' />
       <Link href='https://makerkit.dev/blog/tutorials/nextjs-server-actions' />
       <Link href='https://nextjs.org/learn/dashboard-app' />
+      <Link href='https://javascript.plainenglish.io/complete-authentication-guide-using-next-auth-v5-in-next-js-14-70e7630ab1c2' />
     </main>
   );
 }
