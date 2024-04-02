@@ -17,30 +17,37 @@ export async function listLedgers() {
 };
 
 export async function getLedger(year:number, month:number): Promise<Ledger> {
+  const owner = 'francis';
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
-  let type = 'regular';
+  const fixedLedger = await ledgers.findOne({
+    Year: 0,
+    Month: 0,
+    Type: 'fixed',
+    Owner: owner
+  });
+
   if (year == 0 && month == 0) {
-    type = 'fixed';
+    return fixedLedger;
   }
 
   const ledger = await ledgers.findOne({
     Year: year,
     Month: month,
-    Type: type,
-    Owner: 'francis'
+    Type: 'regular',
+    Owner: owner
   });
 
   if (ledger === null) {
     return {
-      Owner: 'francis',
-      Type: type,
+      Owner: owner,
+      Type: 'regular',
       Month: month,
       Year: year,
       UpdatedAt: new Date(),
-      Debits: [],
-      Credits: [],
+      Debits: fixedLedger.Debits,
+      Credits: fixedLedger.Credits,
     }
   }
   else {
