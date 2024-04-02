@@ -13,7 +13,7 @@ interface LedgerItemListProps {
 function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
   return (
     items.map((item, i) =>
-      <div className="flex">
+      <div key={i} className="flex">
         <Input label="Description" value={item.Label} className="me-2"
               onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:value})} />
         <Input type="number" label="Value" value={item.Amount.toString()} className="me-2 w-48"
