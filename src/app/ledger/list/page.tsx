@@ -1,54 +1,18 @@
-'use client'
-import { useState, useRef, useEffect } from 'react';
-import Header from "@/components/header";
-import { Button, Link, Paper, Stack, TextField } from "@mui/material";
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import NextLink from 'next/link';
-import Head from "next/head"
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
-export default function LedgerList() {
-  const [VisibleItems, setVisibleItems] = useState(0);
-  const [displayedLedgers, setDisplayedLedgers] = useState([]);
-  const ledgers = useRef([]);
+import { Metadata } from "next";
+import { listLedgers } from '@/util/ledger';
+import ListClient from "./ListClient";
 
-  const updateLedgerList = () => {
+export const metadata: Metadata = {
+  title: 'FinTracker - Ledgers'
+}
 
-  };
-
-  useEffect(updateLedgerList, [])
-
-  const renderRow = (props: ListChildComponentProps) => {
-    const { index, style } = props;
-
-    return (
-      <ListItem style={style} key={index} component="div" disablePadding>
-        <ListItemButton>
-          <ListItemText primary={displayedLedgers[index]} />
-        </ListItemButton>
-      </ListItem>
-    )
-  }
+async function LedgerFront() {
+  const ledgers = await listLedgers();
 
   return (
-    <>
-      <Head>
-        <title>FinTracker - Ledgers</title>
-      </Head>
-      <Header />
-      <Paper className='p-4'>
-        <FixedSizeList
-          height={960}
-          width={'80%'}
-          itemSize={46}
-          itemCount={VisibleItems}
-          overscanCount={5}
-        >
-          {renderRow}
-        </FixedSizeList>
-      </Paper>
-    </>
+    <ListClient ledgersSerial={JSON.stringify(ledgers)} />
   )
 }
+
+export default LedgerFront;

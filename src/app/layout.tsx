@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { Providers } from "./providers";
 import "./globals.css";
+import Header from "../components/header";
 
 const inter = Inter({ subsets: ["latin"] });
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-  spacing: 8
-});
 
 export const metadata: Metadata = {
   title: "NextFintracker",
@@ -23,11 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <html lang="en">
-        <CssBaseline enableColorScheme />
-        <body className={inter.className}>{children}</body>
+    <html lang="en" className="dark">
+        <body className={`${inter.className}`}>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+        </body>
       </html>
-    </ThemeProvider>
   );
 }

@@ -1,20 +1,20 @@
 import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
 
-interface Item {
+interface LedgerItem {
   Label: string,
   Amount: number
 }
 
 interface Ledger {
-  _id: ObjectId,
+  _id?: ObjectId,
   Owner: string,
   Type: string,
   Month: number,
   Year: number,
   UpdatedAt: Date,
-  Debits: Item[],
-  Credits: Item[]
+  Debits: LedgerItem[],
+  Credits: LedgerItem[]
 }
 
 interface FTPayload extends JwtPayload {
