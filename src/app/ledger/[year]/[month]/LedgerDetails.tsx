@@ -1,6 +1,6 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
-import { Tabs, Tab, Button } from '@nextui-org/react';
+import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { useMemo, useReducer } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
@@ -89,11 +89,26 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
           <LedgerItemList items={ledger.Credits} ledgerType='Credits' dispatcher={ledgersDispatcher} />
         </Tab>
       </Tabs>
-      <div className='grid grid-rows-1 gap-2 justify-end'>
-        <div>Income: {income}</div>
-        <div>Expenses: {expenses}</div>
-        <div>Net: {net}</div>
-      </div>
+      <Table hideHeader fullWidth={false} aria-label='Summary table'>
+        <TableHeader>
+          <TableColumn align='end'>Label</TableColumn>
+          <TableColumn align='end'>Total</TableColumn>
+        </TableHeader>
+        <TableBody>
+          <TableRow key='1'>
+            <TableCell>Income</TableCell>
+            <TableCell>{income}</TableCell>
+          </TableRow>
+          <TableRow key='2'>
+            <TableCell>Expenses</TableCell>
+            <TableCell>{expenses}</TableCell>
+          </TableRow>
+          <TableRow key='3'>
+            <TableCell>Net</TableCell>
+            <TableCell>{net}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   )
 }
