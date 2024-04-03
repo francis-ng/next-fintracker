@@ -18,11 +18,7 @@ export default async function Login () {
   return (
     <div className='container'>
         <div className='grid grid-cols-1 gap-4'>
-          {/* <Input label='User name' name='username' required />
-          <Input label='Password' name='password' type='password' required /> */}
           <SignIn />
-          {/* <Link href='/user/changepass'>Change password and login</Link>
-          <Link href='/user/register'>Click here to register</Link> */}
         </div>
     </div>
   )
