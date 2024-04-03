@@ -11,6 +11,9 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^2.5.1",
     "@nextui-org/react": "^2.2.10",
+    "@serwist/next": "^9.0.0-preview.21",
+    "@serwist/precaching": "^9.0.0-preview.21",
+    "@serwist/sw": "^9.0.0-preview.21",
     "argon2": "^0.40.1",
     "framer-motion": "^11.0.20",
     "jsonwebtoken": "^9.0.2",
