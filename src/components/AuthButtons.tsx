@@ -6,7 +6,7 @@ export function SignIn() {
   return (
     <Button color='primary'
             onClick={() => signIn('github', {callbackUrl: 'http://localhost:3000/ledger/list'})}>
-      Login
+      Sign in with Github
     </Button>
   )
 }

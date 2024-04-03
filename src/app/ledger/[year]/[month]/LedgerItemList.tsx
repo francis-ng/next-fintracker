@@ -18,9 +18,9 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
         items.map((item, i) =>
           <div key={i} className="flex my-1">
             <Input label="Description" value={item.Label} className="me-2"
-                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:value})} />
+                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:parseInt(value)})} />
             <Input type="number" label="Value" value={item.Amount.toString()} className="me-2 w-48"
-                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})} />
+                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:parseInt(value)})} />
             <Button isIconOnly color="danger" aria-label="Delete" className="h-14"
                     onClick={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
               <TrashIcon width={24} height={24} />

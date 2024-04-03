@@ -1,7 +1,7 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
 import { Tabs, Tab, Button } from '@nextui-org/react';
-import { useReducer } from "react";
+import { useMemo, useReducer } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
 import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
@@ -41,12 +41,9 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
         if (i === action.index) return {...el, [action.field]: action.value};
         else return el;
       });
-      const total = newItems.reduce((prev, cur) => cur.Amount + prev, 0);
-      const totalField = action.book === 'Credits' ? 'CreditTotal' : 'DebitTotal';
       return {
         ...prev,
-        [action.book]: newItems,
-        [totalField]: total
+        [action.book]: newItems
       }
     case 'DELETE':
       prev[action.book].splice(action.index, 1);
@@ -59,6 +56,13 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
 
 function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
   const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
+  const expenses = useMemo(() =>
+    ledger.Debits.map((item) => item.Amount).reduce((prev, cur) => prev + cur)
+  , [ledger.Debits])
+  const income = useMemo(() =>
+    ledger.Credits.map((item) => item.Amount).reduce((prev, cur) => prev + cur)
+  , [ledger.Credits])
+  const net = useMemo(() => income - expenses, [income, expenses])
 
   return (
     <div className='container'>
@@ -85,6 +89,11 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
           <LedgerItemList items={ledger.Credits} ledgerType='Credits' dispatcher={ledgersDispatcher} />
         </Tab>
       </Tabs>
+      <div className='grid grid-rows-1 gap-2 justify-end'>
+        <div>Income: {income}</div>
+        <div>Expenses: {expenses}</div>
+        <div>Net: {net}</div>
+      </div>
     </div>
   )
 }

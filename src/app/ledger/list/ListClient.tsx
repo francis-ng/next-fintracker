@@ -52,23 +52,23 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
         { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
       </Select>
       <div className='flex p-1'>
-        <Link href={`/ledger/0/0`} className='flex-auto me-1'>
-          <Button color='default' className='w-full' aria-label='Fixed Items'>Fixed Items</Button>
-        </Link>
-        <Link href={nextLedgerLink()} className='flex-auto ms-1'>
+        <Link href={nextLedgerLink()} className='flex-auto me-1'>
           <Button color='primary' className='w-full' aria-label='New'
                   startContent={<PlusIcon width={18} height={18}/>}>
             New
           </Button>
+        </Link>
+        <Link href={`/ledger/0/0`} className='flex-auto ms-1'>
+          <Button color='default' className='w-full' aria-label='Fixed Items'>Fixed Items</Button>
         </Link>
       </div>
 
       {/* List */}
       <Listbox variant="shadow" color="secondary" label='Monthly ledger list'>
         {filteredLedgers.map((ledger) => (
-          <ListboxItem key={ledger._id.toString()} className="text-center"
+          <ListboxItem key={ledger._id.toString()} className="text-center h-10 mb-2"
                       aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}>
-            <Link href={`/ledger/${ledger.Year}/${ledger.Month}`}>
+            <Link href={`/ledger/${ledger.Year}/${ledger.Month}`} className='w-full h-full block'>
               {`${ledger.Year} ${monthName(ledger.Month)}`}
             </Link>
           </ListboxItem>

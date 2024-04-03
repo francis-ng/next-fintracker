@@ -21,7 +21,6 @@ export async function listLedgers() {
 
 export async function getLedger(year:number, month:number): Promise<Ledger> {
   const user = (await auth()).user.email;
-  const owner = user;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
@@ -31,7 +30,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
       {Year: month === 1 ? year-1 : year, Month: month === 1 ? 12 : month-1},
       {Year: year, Month: month}
     ],
-    Owner: owner
+    Owner: user
   }).toArray();
 
   // Fixed ledger
@@ -41,7 +40,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
     }
     else {
       return {
-        Owner: owner,
+        Owner: user,
         Type: 'fixed',
         Month: 0,
         Year: 0,
@@ -73,7 +72,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
 
   // New
   return {
-    Owner: owner,
+    Owner: user,
     Type: 'regular',
     Month: month,
     Year: year,
@@ -89,11 +88,11 @@ export async function saveLedger(ledger: Ledger) {
 
   if (ledger.hasOwnProperty('_id')) {
     // Update
-    console.log('Update')
     const { _id, ...update } = ledger;
     update.UpdatedAt = new Date();
-    const result = await ledgers.replaceOne({ _id: new ObjectId(ledger._id.toString()) }, update);
-    console.log(result)
+    const result = await ledgers.replaceOne({
+      _id: new ObjectId(ledger._id.toString())
+    }, update);
     return result;
   }
   else {
