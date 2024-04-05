@@ -1,7 +1,7 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
 import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
-import { useMemo, useReducer } from "react";
+import { useMemo, useReducer, useState } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
 import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
@@ -63,6 +63,13 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
     ledger.Credits.map((item) => item.Amount).reduce((prev, cur) => prev + cur)
   , [ledger.Credits])
   const net = useMemo(() => income - expenses, [income, expenses])
+  const [isSaving, setIsSaving] = useState(false);
+
+  async function save() {
+    setIsSaving(true);
+    await saveLedger(ledger);
+    setIsSaving(false);
+  }
 
   return (
     <div className='container'>
@@ -75,9 +82,9 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
           </Button>
         </Link>
         <div className='grow' />
-        <Button color='primary' className='w-32'
+        <Button color='primary' className='w-32' isLoading={isSaving}
                 startContent={<SaveIcon width={24} height={24}/>}
-                onClick={() => saveLedger(ledger)} aria-label='Save'>
+                onClick={() => save()} aria-label='Save'>
           Save
         </Button>
       </div>

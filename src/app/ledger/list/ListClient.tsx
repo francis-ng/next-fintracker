@@ -51,7 +51,7 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
       >
         { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
       </Select>
-      <div className='flex p-1'>
+      <div className='flex p-1 mb-2'>
         <Link href={nextLedgerLink()} className='flex-auto me-1'>
           <Button color='primary' className='w-full' aria-label='New'
                   startContent={<PlusIcon width={18} height={18}/>}>
