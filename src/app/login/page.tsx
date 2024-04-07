@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { auth } from '@/auth';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { SignIn } from '@/components/AuthButtons';
+import { SignIn } from '@/app/login/AuthButtons';
 
 export const metadata: Metadata = {
   title: 'FinTracker - Login'
