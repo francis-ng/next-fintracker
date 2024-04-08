@@ -21,7 +21,7 @@
   ],
   "theme_color": "#0070F0",
   "background_color": "#0070F0",
-  "start_url": "/",
+  "start_url": "/login",
   "display": "standalone",
   "orientation": "portrait"
 }
