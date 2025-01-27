@@ -1,6 +1,6 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
-import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
+import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import { useMemo, useReducer, useState } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';

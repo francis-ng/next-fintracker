@@ -1,7 +1,7 @@
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 import PlusIcon from "@/components/icons/PlusIcon";
 import SaveIcon from "@/components/icons/SaveIcon";
-import { Button, Skeleton } from "@nextui-org/react";
+import { Button, Skeleton } from "@heroui/react";
 
 function LoadingLedger() {
   return (

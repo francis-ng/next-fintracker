@@ -1,7 +1,7 @@
 'use client'
 import { Ledger } from '@/types';
 import { useState, ChangeEvent, useRef } from "react";
-import { Button, Select, SelectItem, Listbox, ListboxItem } from '@nextui-org/react';
+import { Button, Select, SelectItem, Listbox, ListboxItem } from "@heroui/react";
 import { monthName } from "@/util/dates";
 import Link from 'next/link';
 import PlusIcon from '@/components/icons/PlusIcon';

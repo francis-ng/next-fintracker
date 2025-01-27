@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./logo";
-import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import { auth } from "@/auth";
 import { SignOut } from "../app/login/AuthButtons";
 

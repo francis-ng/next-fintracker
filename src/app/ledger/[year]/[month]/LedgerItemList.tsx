@@ -1,5 +1,5 @@
 import { LedgerItem } from "@/types";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { Dispatch } from "react";
 import { LedgerAction } from "./LedgerDetails";
 import TrashIcon from "@/components/icons/TrashIcon";
