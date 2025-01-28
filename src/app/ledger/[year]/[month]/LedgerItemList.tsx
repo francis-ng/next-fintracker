@@ -22,7 +22,7 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
             <Input type="number" label="Value" value={item.Amount.toString()} className="me-2 w-48"
                   onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:parseInt(value)})} />
             <Button isIconOnly color="danger" aria-label="Delete" className="h-14"
-                    onClick={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
+                    onPress={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
               <TrashIcon width={24} height={24} />
             </Button>
           </div>
@@ -30,7 +30,7 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
       }
       <Button color='secondary' variant='ghost' className='w-full my-3'
               startContent={<PlusIcon width={24} height={24}/>}
-              aria-label='Add' onClick={() => dispatcher({type:'ADD', book:ledgerType})}>
+              aria-label='Add' onPress={() => dispatcher({type:'ADD', book:ledgerType})}>
         Add
       </Button>
     </div>

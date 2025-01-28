@@ -1,7 +1,7 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
 import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import { useMemo, useReducer, useState } from "react";
+import { useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
 import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
@@ -56,6 +56,8 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
 
 function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
   const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
+  const [isSaving, startSaving] = useTransition();
+
   const expenses = useMemo(() =>
     ledger.Debits.map((item) => item.Amount).reduce((prev, cur) => prev + cur)
   , [ledger.Debits])
@@ -63,12 +65,11 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
     ledger.Credits.map((item) => item.Amount).reduce((prev, cur) => prev + cur)
   , [ledger.Credits])
   const net = useMemo(() => income - expenses, [income, expenses])
-  const [isSaving, setIsSaving] = useState(false);
 
   async function save() {
-    setIsSaving(true);
-    await saveLedger(ledger);
-    setIsSaving(false);
+    startSaving(async () => {
+      await saveLedger(ledger)
+    })
   }
 
   return (
@@ -84,7 +85,7 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
         <div className='grow' />
         <Button color='primary' className='w-32' isLoading={isSaving}
                 startContent={<SaveIcon width={24} height={24}/>}
-                onClick={() => save()} aria-label='Save'>
+                onPress={() => save()} aria-label='Save'>
           Save
         </Button>
       </div>
