@@ -22,6 +22,7 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@serwist/build": "^9.0.11",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/jsonwebtoken": "^9.0.6",
@@ -29,7 +30,7 @@
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
+    "eslint": "^9.31.0",
     "eslint-config-next": "15.4.1",
     "postcss": "^8",
     "serwist": "^9.0.11",
