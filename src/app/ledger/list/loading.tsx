@@ -1,8 +1,9 @@
+'use client'
 import { Skeleton } from "@heroui/react";
 
 function LoadingListClient() {
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <Skeleton className="rounded-lg mx-1 mb-3">
         <div className="h-12 mb-2 rounded-lg"></div>
       </Skeleton>

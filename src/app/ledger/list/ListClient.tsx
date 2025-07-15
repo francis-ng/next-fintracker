@@ -41,7 +41,7 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
   }
 
   return (
-    <div className='container'>
+    <div className='container mx-auto'>
       {/* Action bar */}
       <Select
         selectedKeys={[selectedYear]}

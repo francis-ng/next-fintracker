@@ -68,12 +68,12 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
 
   async function save() {
     startSaving(async () => {
-      await saveLedger(ledger)
+      await saveLedger(JSON.stringify(ledger))
     })
   }
 
   return (
-    <div className='container'>
+    <div className='container mx-auto'>
       <div className='flex p-1'>
         <Link href='/ledger/list'>
           <Button color='default' className='w-24'

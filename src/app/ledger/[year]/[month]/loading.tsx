@@ -1,3 +1,4 @@
+'use client'
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 import PlusIcon from "@/components/icons/PlusIcon";
 import SaveIcon from "@/components/icons/SaveIcon";
@@ -5,7 +6,7 @@ import { Button, Skeleton } from "@heroui/react";
 
 function LoadingLedger() {
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <div className='flex p-1 mb-3'>
         <Button color='default' className='w-24'
                 startContent={<LeftArrowIcon width={24} height={24}/>}

@@ -82,7 +82,8 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
   }
 };
 
-export async function saveLedger(ledger: Ledger) {
+export async function saveLedger(ledgerRaw: string) {
+  const ledger: Ledger = JSON.parse(ledgerRaw);
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 

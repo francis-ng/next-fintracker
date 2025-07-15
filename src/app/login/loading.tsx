@@ -1,3 +1,4 @@
+'use client'
 import {CircularProgress} from "@heroui/react";
 
 function loadingLogin() {

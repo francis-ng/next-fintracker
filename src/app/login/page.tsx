@@ -15,7 +15,7 @@ export default async function Login () {
   }
 
   return (
-    <div className='container'>
+    <div className='container mx-auto'>
         <div className='grid grid-cols-1 gap-4'>
           <SignIn />
         </div>
