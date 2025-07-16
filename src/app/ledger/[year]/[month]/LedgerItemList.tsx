@@ -1,5 +1,5 @@
 import { LedgerItem } from "@/types";
-import { Button, Input } from "@heroui/react";
+import { Button, Input, NumberInput } from "@heroui/react";
 import { Dispatch } from "react";
 import { LedgerAction } from "./LedgerDetails";
 import TrashIcon from "@/components/icons/TrashIcon";
@@ -19,8 +19,8 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
           <div key={i} className="flex my-1">
             <Input label="Description" value={item.Label} className="me-2"
                   onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:value})} />
-            <Input type="number" label="Value" value={item.Amount.toString()} className="me-2 w-48"
-                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:parseInt(value)})} />
+            <NumberInput type="number" label="Value" value={item.Amount} className="me-2 w-48"
+                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})} />
             <Button isIconOnly color="danger" aria-label="Delete" className="h-14"
                     onPress={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
               <TrashIcon width={24} height={24} />

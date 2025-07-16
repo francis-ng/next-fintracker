@@ -1,22 +1,22 @@
 'use client'
 import { Ledger } from '@/types';
 import { useState, ChangeEvent, useRef } from "react";
-import { Button, Select, SelectItem, Listbox, ListboxItem } from "@heroui/react";
+import { Button, Select, SelectItem, Listbox, ListboxItem, Link } from "@heroui/react";
 import { monthName } from "@/util/dates";
-import Link from 'next/link';
 import PlusIcon from '@/components/icons/PlusIcon';
 
 
 function ListClient({ledgersSerial}: {ledgersSerial: string}) {
   const ledgers = useRef<Ledger[]>(JSON.parse(ledgersSerial));
-  const years = useRef(
-    ledgers.current
-    .map((item) => item.Year.toString())
-    .filter((item, index, array) => array.indexOf(item) === index)
-  );
-  const [selectedYear, setSelectedYear] = useState(years.current[0]);
+  const years = useRef([
+    ...new Map(
+      ledgers.current
+      .map((item) => [ item.Year, {key:item.Year.toString(), label:item.Year.toString()} ])
+    ).values()
+  ]);
+  const [selectedYear, setSelectedYear] = useState(years.current[0].key);
   const [filteredLedgers, setFilteredLedgers] = useState(
-    ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0]))
+    ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0].key))
   );
 
   function nextLedgerLink() {
@@ -44,35 +44,35 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
     <div className='container mx-auto'>
       {/* Action bar */}
       <Select
+        items={years.current}
         selectedKeys={[selectedYear]}
         label='Filter year'
         className='w-full p-1 mb-2'
         onChange={yearChanged}
       >
-        { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
+        { (year) => <SelectItem textValue={`${year.label}`}>{year.label}</SelectItem>}
       </Select>
       <div className='flex p-1 mb-2'>
-        <Link href={nextLedgerLink()} className='flex-auto me-1'>
-          <Button color='primary' className='w-full' aria-label='New'
-                  startContent={<PlusIcon width={18} height={18}/>}>
-            New
-          </Button>
-        </Link>
-        <Link href={`/ledger/0/0`} className='flex-auto ms-1'>
-          <Button color='default' className='w-full' aria-label='Fixed Items'>Fixed Items</Button>
-        </Link>
+        <Button as={Link} href={nextLedgerLink()}
+                color='primary' className='w-full me-1' aria-label='New'
+                startContent={<PlusIcon width={18} height={18}/>}>
+          New
+        </Button>
+        <Button as={Link} href={`/ledger/0/0`}
+                color='default' className='w-full ms-1' aria-label='Fixed Items'>
+          Fixed Items
+        </Button>
       </div>
 
       {/* List */}
-      <Listbox variant="shadow" color="secondary" label='Monthly ledger list'>
-        {filteredLedgers.map((ledger) => (
+      <Listbox variant="shadow" color="secondary" label='Monthly ledger list' items={filteredLedgers}>
+        {(ledger) => (
           <ListboxItem key={ledger._id.toString()} className="text-center h-10 mb-2"
-                      aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}>
-            <Link href={`/ledger/${ledger.Year}/${ledger.Month}`} className='w-full h-full block'>
+                      aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}
+                      href={`/ledger/${ledger.Year}/${ledger.Month}`}>
               {`${ledger.Year} ${monthName(ledger.Month)}`}
-            </Link>
           </ListboxItem>
-        ))}
+        )}
       </Listbox>
     </div>
   )
