@@ -1,9 +1,8 @@
 'use client'
 import { Ledger } from '@/types';
 import { useState, ChangeEvent, useRef } from "react";
-import { Button, Select, SelectItem, Listbox, ListboxItem } from "@heroui/react";
+import { Button, Select, SelectItem, Listbox, ListboxItem, Link } from "@heroui/react";
 import { monthName } from "@/util/dates";
-import Link from 'next/link';
 import PlusIcon from '@/components/icons/PlusIcon';
 
 
@@ -52,27 +51,26 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
         { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
       </Select>
       <div className='flex p-1 mb-2'>
-        <Link href={nextLedgerLink()} className='flex-auto me-1'>
-          <Button color='primary' className='w-full' aria-label='New'
-                  startContent={<PlusIcon width={18} height={18}/>}>
-            New
-          </Button>
-        </Link>
-        <Link href={`/ledger/0/0`} className='flex-auto ms-1'>
-          <Button color='default' className='w-full' aria-label='Fixed Items'>Fixed Items</Button>
-        </Link>
+        <Button as={Link} href={nextLedgerLink()}
+                color='primary' className='w-full me-1' aria-label='New'
+                startContent={<PlusIcon width={18} height={18}/>}>
+          New
+        </Button>
+        <Button as={Link} href={`/ledger/0/0`}
+                color='default' className='w-full ms-1' aria-label='Fixed Items'>
+          Fixed Items
+        </Button>
       </div>
 
       {/* List */}
-      <Listbox variant="shadow" color="secondary" label='Monthly ledger list'>
-        {filteredLedgers.map((ledger) => (
+      <Listbox variant="shadow" color="secondary" label='Monthly ledger list' items={filteredLedgers}>
+        {(ledger) => (
           <ListboxItem key={ledger._id.toString()} className="text-center h-10 mb-2"
-                      aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}>
-            <Link href={`/ledger/${ledger.Year}/${ledger.Month}`} className='w-full h-full block'>
+                      aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}
+                      href={`/ledger/${ledger.Year}/${ledger.Month}`}>
               {`${ledger.Year} ${monthName(ledger.Month)}`}
-            </Link>
           </ListboxItem>
-        ))}
+        )}
       </Listbox>
     </div>
   )
