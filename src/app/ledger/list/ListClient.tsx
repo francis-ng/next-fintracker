@@ -8,14 +8,15 @@ import PlusIcon from '@/components/icons/PlusIcon';
 
 function ListClient({ledgersSerial}: {ledgersSerial: string}) {
   const ledgers = useRef<Ledger[]>(JSON.parse(ledgersSerial));
-  const years = useRef(
-    ledgers.current
-    .map((item) => item.Year.toString())
-    .filter((item, index, array) => array.indexOf(item) === index)
-  );
-  const [selectedYear, setSelectedYear] = useState(years.current[0]);
+  const years = useRef([
+    ...new Map(
+      ledgers.current
+      .map((item) => [ item.Year, {key:item.Year.toString(), label:item.Year.toString()} ])
+    ).values()
+  ]);
+  const [selectedYear, setSelectedYear] = useState(years.current[0].key);
   const [filteredLedgers, setFilteredLedgers] = useState(
-    ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0]))
+    ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0].key))
   );
 
   function nextLedgerLink() {
@@ -43,12 +44,13 @@ function ListClient({ledgersSerial}: {ledgersSerial: string}) {
     <div className='container mx-auto'>
       {/* Action bar */}
       <Select
+        items={years.current}
         selectedKeys={[selectedYear]}
         label='Filter year'
         className='w-full p-1 mb-2'
         onChange={yearChanged}
       >
-        { years.current.map((year) => <SelectItem key={year} textValue={`${year}`}>{year}</SelectItem>)}
+        { (year) => <SelectItem textValue={`${year.label}`}>{year.label}</SelectItem>}
       </Select>
       <div className='flex p-1 mb-2'>
         <Button as={Link} href={nextLedgerLink()}

@@ -1,6 +1,6 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
-import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast, ToastProvider } from "@heroui/react";
 import { useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
@@ -68,12 +68,27 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
 
   async function save() {
     startSaving(async () => {
-      await saveLedger(JSON.stringify(ledger))
+      const result = await saveLedger(JSON.stringify(ledger));
+      if (result.acknowledged) {
+        addToast({
+          title: 'Saved',
+          color: 'success'
+        })
+      }
+      else {
+        addToast({
+          title: 'Save failed',
+          color: 'danger'
+        })
+      }
     })
   }
 
   return (
     <div className='container mx-auto'>
+      <div className='fixed z-100'>
+        <ToastProvider placement='top-center' />
+      </div>
       <div className='flex p-1'>
         <Link href='/ledger/list'>
           <Button color='default' className='w-24'
