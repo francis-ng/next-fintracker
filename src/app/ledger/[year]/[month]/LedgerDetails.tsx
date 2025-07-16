@@ -1,6 +1,6 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
-import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast, ToastProvider } from "@heroui/react";
+import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast } from "@heroui/react";
 import { useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
@@ -86,9 +86,6 @@ function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
 
   return (
     <div className='container mx-auto'>
-      <div className='fixed z-100'>
-        <ToastProvider placement='top-center' />
-      </div>
       <div className='flex p-1'>
         <Link href='/ledger/list'>
           <Button color='default' className='w-24'
