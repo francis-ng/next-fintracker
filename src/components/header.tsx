@@ -1,11 +1,10 @@
-import React from "react";
-import { auth } from "@/auth";
 import FintrackNav from "./FintrackNav";
+import { auth } from "../auth";
 
 export default async function Header() {
-  const session = await auth();
+  const session = auth.api.getSession();
 
   return (
-    <FintrackNav name={session?.user?.name} />
+    <FintrackNav session={session} />
   )
 }

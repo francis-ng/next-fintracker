@@ -1,11 +1,13 @@
 'use server'
 import { auth } from "@/auth";
+import { headers } from 'next/headers';
 import { Ledger, LedgerItem } from "@/types";
 import clientPromise from "@/util/mongoAdapter";
 import { ObjectId } from "mongodb";
 
 export async function listLedgers() {
-  const user = (await auth()).user.email;
+  const session = await auth.api.getSession({ headers: await headers() });
+  const user = session.user.email;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
   const userLedgers = ledgers.find<Ledger>({
@@ -20,7 +22,8 @@ export async function listLedgers() {
 };
 
 export async function getLedger(year:number, month:number): Promise<Ledger> {
-  const user = (await auth()).user.email;
+  const session = await auth.api.getSession({ headers: await headers() });
+  const user = session.user.email;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 

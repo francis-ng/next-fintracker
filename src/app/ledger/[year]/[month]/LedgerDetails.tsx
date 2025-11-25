@@ -1,7 +1,7 @@
 'use client'
 import { Ledger, LedgerItem } from '@/types';
 import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast } from "@heroui/react";
-import { useMemo, useReducer, useTransition } from "react";
+import { use, useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
 import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
@@ -54,8 +54,9 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
   }
 }
 
-function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
-  const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
+function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<Ledger>}) {
+  const ledgerData = use(ledgerPromise);
+  const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, ledgerData);
   const [isSaving, startSaving] = useTransition();
 
   const expenses = useMemo(() =>
