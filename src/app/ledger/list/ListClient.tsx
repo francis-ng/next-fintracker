@@ -1,15 +1,14 @@
 'use client'
-import { Ledger } from '@/types';
+import { SerializableLedger } from '@/types';
 import { useState, ChangeEvent, useRef, use } from "react";
 import { Button, Select, SelectItem, Listbox, ListboxItem, Link } from "@heroui/react";
 import { monthName } from "@/util/dates";
 import PlusIcon from '@/components/icons/PlusIcon';
 
 
-function ListClient({ledgersPromise}: {ledgersPromise: Promise<Ledger[]>}) {
+function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedger[]>}) {
   const ledgerData = use(ledgersPromise);
-  console.log(ledgerData);
-  const ledgers = useRef<Ledger[]>(ledgerData);
+  const ledgers = useRef<SerializableLedger[]>(ledgerData);
   const years = useRef([
     ...new Map(
       ledgers.current
