@@ -24,7 +24,9 @@ function fromSerializableLedger(serializableLedger: SerializableLedger): Ledger 
 //endregion
 
 export async function listLedgers(): Promise<SerializableLedger[]> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const headerData = await headers();
+  if (!headerData) return [];
+  const session = await auth.api.getSession({ headers: headerData });
   const user = session.user.id;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);

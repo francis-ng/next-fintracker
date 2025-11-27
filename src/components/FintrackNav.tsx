@@ -4,7 +4,7 @@ import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import { SignOut } from "../app/login/AuthButtons";
 import { Activity } from "react";
 
-export default function FintrackNav({session}: {session}) {
+export default function FintrackNav({session}) {
   return (
     <Navbar maxWidth="full">
       <NavbarBrand>
