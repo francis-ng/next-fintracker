@@ -27,7 +27,8 @@ export async function listLedgers(): Promise<SerializableLedger[]> {
   const headerData = await headers();
   if (!headerData) return [];
   const session = await auth.api.getSession({ headers: headerData });
-  const user = session.user.id;
+  const user = session.user.email;
+  console.log(`Listing ledgers for ${user}`);
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
   const userLedgers = ledgers.find<Ledger>({
@@ -44,7 +45,8 @@ export async function listLedgers(): Promise<SerializableLedger[]> {
 
 export async function getLedger(year:number, month:number): Promise<SerializableLedger> {
   const session = await auth.api.getSession({ headers: await headers() });
-  const user = session.user.id;
+  const user = session.user.email;
+  console.log(`Getting ledger ${year}/${month} for ${user}`);
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
