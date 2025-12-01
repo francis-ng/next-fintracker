@@ -1,7 +1,7 @@
 'use client'
-import { Ledger, LedgerItem } from '@/types';
+import { SerializableLedger, LedgerItem } from '@/types';
 import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast } from "@heroui/react";
-import { useMemo, useReducer, useTransition } from "react";
+import { use, useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
 import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
@@ -11,7 +11,7 @@ import { saveLedger } from '@/util/ledger';
 
 export interface LedgerAction {
   type: 'SET' | 'ADD' | 'BATCH ADD' | 'UPDATE' | 'DELETE',
-  ledger?: Ledger,
+  ledger?: SerializableLedger,
   items?: LedgerItem[],
   book?: 'Debits' | 'Credits',
   index?: number,
@@ -19,7 +19,7 @@ export interface LedgerAction {
   value?: string | number
 }
 
-const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
+const ledgerReducer = (prev: SerializableLedger, action: LedgerAction) => {
   switch (action.type) {
     case 'SET':
       return action.ledger;
@@ -54,8 +54,9 @@ const ledgerReducer = (prev: Ledger, action: LedgerAction) => {
   }
 }
 
-function LedgerDetails({ledgerSerial}: {ledgerSerial: string}) {
-  const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, JSON.parse(ledgerSerial));
+function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedger>}) {
+  const ledgerData = use(ledgerPromise);
+  const [ledger, ledgersDispatcher] = useReducer(ledgerReducer, ledgerData);
   const [isSaving, startSaving] = useTransition();
 
   const expenses = useMemo(() =>

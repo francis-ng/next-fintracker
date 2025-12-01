@@ -17,6 +17,17 @@ interface Ledger {
   Credits: LedgerItem[]
 }
 
+interface SerializableLedger {
+  _id?: string,
+  Owner: string,
+  Type: string,
+  Month: number,
+  Year: number,
+  UpdatedAt: string,
+  Debits: LedgerItem[],
+  Credits: LedgerItem[]
+}
+
 interface FTPayload extends JwtPayload {
   user: string
 }

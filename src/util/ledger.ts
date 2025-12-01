@@ -1,11 +1,33 @@
 'use server'
 import { auth } from "@/auth";
-import { Ledger, LedgerItem } from "@/types";
+import { headers } from 'next/headers';
+import { Ledger, LedgerItem, SerializableLedger } from "@/types";
 import clientPromise from "@/util/mongoAdapter";
 import { ObjectId } from "mongodb";
 
-export async function listLedgers() {
-  const user = (await auth()).user.email;
+//region Ledger conversions
+function toSerializableLedger (ledger: Ledger): SerializableLedger {
+  return {
+    ...ledger,
+    _id: ledger._id?.toString(),
+    UpdatedAt: ledger.UpdatedAt?.toISOString()
+  }
+}
+
+function fromSerializableLedger(serializableLedger: SerializableLedger): Ledger {
+  return {
+    ...serializableLedger,
+    _id: serializableLedger._id ? new ObjectId(serializableLedger._id) : undefined,
+    UpdatedAt: new Date(serializableLedger.UpdatedAt)
+  }
+}
+//endregion
+
+export async function listLedgers(): Promise<SerializableLedger[]> {
+  const headerData = await headers();
+  if (!headerData) return [];
+  const session = await auth.api.getSession({ headers: headerData });
+  const user = session.user.id;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
   const userLedgers = ledgers.find<Ledger>({
@@ -16,11 +38,13 @@ export async function listLedgers() {
     sort: { Year: -1, Month: -1 }
   });
 
-  return await userLedgers.toArray();
+  const result = await userLedgers.toArray();
+  return result.map(toSerializableLedger);
 };
 
-export async function getLedger(year:number, month:number): Promise<Ledger> {
-  const user = (await auth()).user.email;
+export async function getLedger(year:number, month:number): Promise<SerializableLedger> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const user = session.user.id;
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
@@ -36,10 +60,10 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
   // Fixed ledger
   if (year == 0 && month == 0) {
     if (relLedgers.length > 0 && relLedgers[0].Type === 'fixed') {
-      return relLedgers[0];
+      return toSerializableLedger(relLedgers[0]);
     }
     else {
-      return {
+      return toSerializableLedger({
         Owner: user,
         Type: 'fixed',
         Month: 0,
@@ -47,7 +71,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
         UpdatedAt: new Date(),
         Debits: [],
         Credits: []
-      };
+      });
     }
   }
 
@@ -55,7 +79,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
   if (relLedgers.length > 0 &&
       relLedgers[relLedgers.length-1].Year === year &&
       relLedgers[relLedgers.length-1].Month === month) {
-    return relLedgers[relLedgers.length-1];
+    return toSerializableLedger(relLedgers[relLedgers.length-1]);
   }
 
   const regex = /(\d+)\/(\d+)/gm
@@ -71,7 +95,7 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
   }
 
   // New
-  return {
+  return toSerializableLedger({
     Owner: user,
     Type: 'regular',
     Month: month,
@@ -79,11 +103,12 @@ export async function getLedger(year:number, month:number): Promise<Ledger> {
     UpdatedAt: new Date(),
     Debits: relLedgers.length > 0 ? relLedgers[0].Debits.concat(continuedDebits) : continuedDebits,
     Credits: relLedgers.length > 0 ? relLedgers[0].Credits : []
-  }
+  })
 };
 
 export async function saveLedger(ledgerRaw: string) {
-  const ledger: Ledger = JSON.parse(ledgerRaw);
+  const serializableLedger: SerializableLedger = JSON.parse(ledgerRaw);
+  const ledger = fromSerializableLedger(serializableLedger);
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 

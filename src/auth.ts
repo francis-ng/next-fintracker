@@ -1,18 +1,13 @@
-import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
+import { betterAuth, Auth } from "better-auth"
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
-  providers: [
-    GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
-    })
-  ],
-  // adapter: MongoDBAdapter(clientPromise),
+export const auth: Auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET,
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string
+    }
+  },
   pages: {
     signIn: '/user/login'
   }

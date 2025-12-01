@@ -1,10 +1,10 @@
 'use client'
-import React from "react";
 import Logo from "./logo";
 import { Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import { SignOut } from "../app/login/AuthButtons";
+import { Activity } from "react";
 
-export default function FintrackNav({name}: {name: string}) {
+export default function FintrackNav({session}) {
   return (
     <Navbar maxWidth="full">
       <NavbarBrand>
@@ -12,8 +12,10 @@ export default function FintrackNav({name}: {name: string}) {
         <p className="font-bold text-inherit">FinTracker</p>
       </NavbarBrand>
       <NavbarContent justify="end">
-        {name}
-        { name && <SignOut /> }
+        <Activity mode={session?.data? 'visible' : 'hidden'}>
+          {session?.data?.user?.name}
+          <SignOut />
+        </Activity>
       </NavbarContent>
     </Navbar>
   )

@@ -1,6 +1,8 @@
 import { getLedger } from "@/util/ledger";
 import { Metadata } from "next";
 import LedgerDetails from "./LedgerDetails";
+import { Suspense } from "react";
+import LoadingLedger from "./loading";
 
 export const metadata: Metadata = {
   title: `FinTracker - Details`
@@ -8,10 +10,12 @@ export const metadata: Metadata = {
 
 async function LedgerDetail(props: {params: Promise<{year: string, month: string}>}) {
   const params = await props.params;
-  const ledger = await getLedger(parseInt(params.year), parseInt(params.month));
+  const ledger = getLedger(parseInt(params.year), parseInt(params.month));
 
   return (
-    <LedgerDetails ledgerSerial={JSON.stringify(ledger)} />
+    <Suspense fallback={<LoadingLedger />}>
+      <LedgerDetails ledgerPromise={ledger} />
+    </Suspense>
   )
 }
 
