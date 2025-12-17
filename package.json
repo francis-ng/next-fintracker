@@ -12,7 +12,7 @@
     "@heroui/react": "^2.8.5",
     "@serwist/next": "^9.0.11",
     "argon2": "^0.40.1",
-    "better-auth": "^1.4.2",
+    "better-auth": "^1.4.5",
     "framer-motion": "^12.23.24",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
