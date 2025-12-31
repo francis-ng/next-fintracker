@@ -114,7 +114,7 @@ export async function saveLedger(ledgerRaw: string) {
   const client = await clientPromise;
   const ledgers = client.db(process.env.MONGO_DB).collection<Ledger>(process.env.LEDGER_COLLECTION);
 
-  if (ledger.hasOwnProperty('_id')) {
+  if (ledger.hasOwnProperty('_id') && ledger._id !== undefined) {
     // Update
     const { _id, ...update } = ledger;
     update.UpdatedAt = new Date();
