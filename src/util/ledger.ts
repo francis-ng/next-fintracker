@@ -84,11 +84,11 @@ export async function getLedger(year:number, month:number): Promise<Serializable
     return toSerializableLedger(relLedgers[relLedgers.length-1]);
   }
 
-  const regex = /(\d+)\/(\d+)/gm
   const continuedDebits: LedgerItem[] = [];
   if (relLedgers.length > 0) {
     for (const item of relLedgers[relLedgers.length-1].Debits) {
-      const match = regex.exec(item.Label);
+      const regex = /(\d+)\/(\d+)/gm
+      const match = regex.exec(item.Label.trim());
       if (match !== null && match[1] !== match[2]) {
         const newLabel = item.Label.replace(match[0], `${parseInt(match[1])+1}/${match[2]}`);
         continuedDebits.push({Label: newLabel, Amount: item.Amount});

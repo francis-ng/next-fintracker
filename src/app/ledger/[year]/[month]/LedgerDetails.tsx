@@ -1,5 +1,5 @@
 'use client'
-import { SerializableLedger, LedgerItem } from '@/types';
+import { SerializableLedger } from '@/types';
 import { Tabs, Tab, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, addToast } from "@heroui/react";
 import { use, useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
@@ -9,20 +9,14 @@ import SaveIcon from '@/components/icons/SaveIcon';
 import { saveLedger } from '@/util/ledger';
 
 
-export interface LedgerAction {
-  type: 'SET' | 'ADD' | 'BATCH ADD' | 'UPDATE' | 'DELETE',
-  ledger?: SerializableLedger,
-  items?: LedgerItem[],
-  book?: 'Debits' | 'Credits',
-  index?: number,
-  field?: 'Label' | 'Amount',
-  value?: string | number
-}
+export type LedgerAction =
+  | { type: 'ADD', book: 'Debits' | 'Credits' }
+  | { type: 'DELETE', book: 'Debits' | 'Credits', index: number }
+  | { type: 'UPDATE', book: 'Debits' | 'Credits', index: number, field: 'Label', value: string }
+  | { type: 'UPDATE', book: 'Debits' | 'Credits', index: number, field: 'Amount', value: number }
 
 const ledgerReducer = (prev: SerializableLedger, action: LedgerAction) => {
   switch (action.type) {
-    case 'SET':
-      return action.ledger;
     case 'ADD':
       return {
         ...prev,
@@ -31,11 +25,6 @@ const ledgerReducer = (prev: SerializableLedger, action: LedgerAction) => {
           Amount: 0
         })
       };
-    case 'BATCH ADD':
-      return {
-        ...prev,
-        [action.book]: prev[action.book].concat(action.items)
-      }
     case 'UPDATE':
       const newItems = prev[action.book].map((el, i) => {
         if (i === action.index) return {...el, [action.field]: action.value};
