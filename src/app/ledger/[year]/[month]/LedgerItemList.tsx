@@ -1,9 +1,8 @@
 import { LedgerItem } from "@/types";
-import { Label, Button, TextField, Input, NumberField } from "@heroui/react";
+import { Button, TextField, Input, NumberField } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import { Dispatch } from "react";
 import { LedgerAction } from "./LedgerDetails";
-import TrashIcon from "@/components/icons/TrashIcon";
-import PlusIcon from '@/components/icons/PlusIcon';
 
 interface LedgerItemListProps {
   items: LedgerItem[],
@@ -31,14 +30,14 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
             </NumberField>
             <Button isIconOnly variant="danger-soft" aria-label="Delete"
                     onPress={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
-              <TrashIcon width={24} height={24} />
+              <Icon icon="ph:trash-thin" width={24} height={24} />
             </Button>
           </div>
         )
       }
       <Button variant='outline' className='w-full'
               aria-label='Add' onPress={() => dispatcher({type:'ADD', book:ledgerType})}>
-        <PlusIcon width={24} height={24}/>
+        <Icon icon="mdi-light:plus" width={24} height={24}/>
         Add
       </Button>
     </div>

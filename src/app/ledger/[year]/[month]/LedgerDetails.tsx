@@ -4,8 +4,7 @@ import { Tabs, Button, Table, toast, Spinner } from "@heroui/react";
 import { use, useMemo, useReducer, useTransition } from "react";
 import Link from 'next/link';
 import LedgerItemList from './LedgerItemList';
-import LeftArrowIcon from '@/components/icons/LeftArrowIcon';
-import SaveIcon from '@/components/icons/SaveIcon';
+import { Icon } from '@iconify/react';
 import { saveLedger } from '@/util/ledger';
 
 
@@ -72,9 +71,9 @@ function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedg
     <div className='container mx-auto'>
       <div className='flex p-1'>
         <Link href='/ledger/list'>
-          <Button variant='primary' className='w-24'
+          <Button variant='tertiary' className='w-24'
                   aria-label='Back'>
-            <LeftArrowIcon width={24} height={24}/>
+            <Icon icon="iconamoon:arrow-left-2-thin" width={24} height={24} />
             Back
           </Button>
         </Link>
@@ -83,7 +82,7 @@ function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedg
                 onPress={() => save()} aria-label='Save'>
           {({isPending}) => (
             <>
-              <SaveIcon width={24} height={24}/>
+              <Icon icon="pepicons-pencil:cloud-up" width={24} height={24} />
               {isPending ? "Saving..." : "Save"}
               {isPending ? <Spinner color="current" size="sm" /> : null}
             </>
@@ -113,7 +112,7 @@ function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedg
       <Table>
         <Table.Content aria-label='Summary table'>
           <Table.Header>
-            <Table.Column isRowHeader>Label</Table.Column>
+            <Table.Column isRowHeader>Item</Table.Column>
             <Table.Column>Value</Table.Column>
           </Table.Header>
           <Table.Body>

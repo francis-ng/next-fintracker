@@ -4,9 +4,9 @@ import { SerializableLedger } from '@/types';
 import { useState, useRef, use } from "react";
 import { Select, ListBox, Label } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
+import { Icon } from "@iconify/react";
 import { Collection, Key } from "react-aria-components";
 import { monthName } from "@/util/dates";
-import PlusIcon from '@/components/icons/PlusIcon';
 
 
 function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedger[]>}) {
@@ -71,7 +71,7 @@ function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedge
       <div className='flex p-1 mb-2'>
         <NextLink href={nextLedgerLink()}
                 className={`me-1 ${secondaryButtonStyle}`} aria-label='New'>
-          <PlusIcon width={18} height={18}/>
+          <Icon icon="mdi-light:plus" width={24} height={24}/>
           New
         </NextLink>
         <NextLink href={`/ledger/0/0`}
