@@ -15,12 +15,12 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
     <div>
       {
         items.map((item, i) =>
-          <div key={i} className="flex my-1 mb-4">
-            <TextField className="basis-3/4 me-2" aria-label="Item" >
+          <div key={i} className="grid grid-cols-[90%_10%] gap-2 md:flex md:gap-0 my-1 mb-4">
+            <TextField className="order-1 md:basis-3/4 md:order-1 me-2" aria-label="Item" >
               <Input value={item.Label} placeholder="Item"
                 onChange={(e) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:e.target.value})} />
             </TextField>
-            <NumberField className="basis-1/4 me-2 w-48" aria-label="Amount" value={item.Amount}
+            <NumberField className="order-3 md:basis-1/4 md:order-2 md:w-48 me-2" aria-label="Amount" value={item.Amount}
                 onChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})}>
               <NumberField.Group>
                 <NumberField.DecrementButton />
@@ -28,7 +28,7 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
                 <NumberField.IncrementButton />
               </NumberField.Group>
             </NumberField>
-            <Button isIconOnly variant="danger-soft" aria-label="Delete"
+            <Button isIconOnly variant="danger-soft" aria-label="Delete" className="h-21 order-2 row-span-2 md:order-3 md:h-9"
                     onPress={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
               <Icon icon="ph:trash-thin" width={24} height={24} />
             </Button>
