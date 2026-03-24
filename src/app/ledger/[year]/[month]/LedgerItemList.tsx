@@ -1,5 +1,5 @@
 import { LedgerItem } from "@/types";
-import { Button, Input, NumberInput } from "@heroui/react";
+import { Label, Button, TextField, Input, NumberField } from "@heroui/react";
 import { Dispatch } from "react";
 import { LedgerAction } from "./LedgerDetails";
 import TrashIcon from "@/components/icons/TrashIcon";
@@ -16,21 +16,29 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
     <div>
       {
         items.map((item, i) =>
-          <div key={i} className="flex my-1">
-            <Input label="Description" value={item.Label} className="me-2"
-                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:value})} />
-            <NumberInput type="number" label="Value" value={item.Amount} className="me-2 w-48"
-                  onValueChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})} />
-            <Button isIconOnly color="danger" aria-label="Delete" className="h-14"
+          <div key={i} className="flex my-1 mb-4">
+            <TextField className="basis-3/4 me-2" aria-label="Item" >
+              <Input value={item.Label} placeholder="Item"
+                onChange={(e) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:e.target.value})} />
+            </TextField>
+            <NumberField className="basis-1/4 me-2 w-48" aria-label="Amount" value={item.Amount}
+                onChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})}>
+              <NumberField.Group>
+                <NumberField.DecrementButton />
+                <NumberField.Input placeholder="Value" />
+                <NumberField.IncrementButton />
+              </NumberField.Group>
+            </NumberField>
+            <Button isIconOnly variant="danger-soft" aria-label="Delete"
                     onPress={() => dispatcher({type:'DELETE', book:ledgerType, index:i})}>
               <TrashIcon width={24} height={24} />
             </Button>
           </div>
         )
       }
-      <Button color='secondary' variant='ghost' className='w-full my-3'
-              startContent={<PlusIcon width={24} height={24}/>}
+      <Button variant='outline' className='w-full'
               aria-label='Add' onPress={() => dispatcher({type:'ADD', book:ledgerType})}>
+        <PlusIcon width={24} height={24}/>
         Add
       </Button>
     </div>

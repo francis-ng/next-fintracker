@@ -6,7 +6,7 @@ export function SignIn() {
   const authClient = createAuthClient();
 
   return (
-    <Button color='primary'
+    <Button variant='primary'
       onPress={async () => await authClient.signIn.social({ provider: 'github' })}>
       Sign in with Github
     </Button>
@@ -17,7 +17,7 @@ export function SignOut() {
   const authClient = createAuthClient();
 
   return (
-    <Button color="danger" variant="ghost" onPress={async () => await authClient.signOut()}>
+    <Button variant="danger-soft" onPress={async () => await authClient.signOut()}>
       Sign Out
     </Button>
   );

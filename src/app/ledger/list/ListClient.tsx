@@ -1,7 +1,10 @@
 'use client'
+import NextLink from "next/link";
 import { SerializableLedger } from '@/types';
-import { useState, ChangeEvent, useRef, use } from "react";
-import { Button, Select, SelectItem, Listbox, ListboxItem, Link } from "@heroui/react";
+import { useState, useRef, use } from "react";
+import { Select, ListBox, Label } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
+import { Collection, Key } from "react-aria-components";
 import { monthName } from "@/util/dates";
 import PlusIcon from '@/components/icons/PlusIcon';
 
@@ -19,6 +22,9 @@ function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedge
   const [filteredLedgers, setFilteredLedgers] = useState(
     ledgers.current.filter((ledger) => ledger.Year === parseInt(years.current[0].key))
   );
+  const ghostButtonStyle = buttonVariants({variant: 'ghost', fullWidth: true});
+  const secondaryButtonStyle = buttonVariants({variant: 'secondary', fullWidth: true});
+  const tertiaryButtonStyle = buttonVariants({variant: 'tertiary', fullWidth: true});
 
   function nextLedgerLink() {
     const nextMonth = ledgers.current.length === 0 ?
@@ -34,10 +40,10 @@ function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedge
     return `/ledger/${nextYear}/${nextMonth}`;
   }
 
-  function yearChanged(event: ChangeEvent<HTMLSelectElement>) {
-    setSelectedYear(event.target.value);
+  function yearChanged(year: Key) {
+    setSelectedYear(year as string);
     setFilteredLedgers(
-      ledgers.current.filter((ledger) => ledger.Year === parseInt(event.target.value))
+      ledgers.current.filter((ledger) => ledger.Year === parseInt(year as string))
     )
   }
 
@@ -45,36 +51,49 @@ function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedge
     <div className='container mx-auto'>
       {/* Action bar */}
       <Select
-        items={years.current}
-        selectedKeys={[selectedYear]}
-        label='Filter year'
+        value={selectedYear}
         className='w-full p-1 mb-2'
         onChange={yearChanged}
       >
-        { (year) => <SelectItem textValue={`${year.label}`}>{year.label}</SelectItem>}
+        <Label>Filter year</Label>
+        <Select.Trigger>
+          <Select.Value />
+          <Select.Indicator />
+        </Select.Trigger>
+        <Select.Popover>
+          <ListBox>
+            <Collection items={years.current}>
+              { (year) => <ListBox.Item id={year.label} textValue={`${year.label}`}><Label>{year.label}</Label><ListBox.ItemIndicator /></ListBox.Item>}
+            </Collection>
+          </ListBox>
+        </Select.Popover>
       </Select>
       <div className='flex p-1 mb-2'>
-        <Button as={Link} href={nextLedgerLink()}
-                color='primary' className='w-full me-1' aria-label='New'
-                startContent={<PlusIcon width={18} height={18}/>}>
+        <NextLink href={nextLedgerLink()}
+                className={`me-1 ${secondaryButtonStyle}`} aria-label='New'>
+          <PlusIcon width={18} height={18}/>
           New
-        </Button>
-        <Button as={Link} href={`/ledger/0/0`}
-                color='default' className='w-full ms-1' aria-label='Fixed Items'>
+        </NextLink>
+        <NextLink href={`/ledger/0/0`}
+                className={`me-1 ${tertiaryButtonStyle}`} aria-label='Fixed Items'>
           Fixed Items
-        </Button>
+        </NextLink>
       </div>
 
       {/* List */}
-      <Listbox variant="shadow" color="secondary" label='Monthly ledger list' items={filteredLedgers}>
-        {(ledger) => (
-          <ListboxItem key={ledger._id.toString()} className="text-center h-10 mb-2"
-                      aria-label={`${ledger.Year} ${monthName(ledger.Month)}`}
-                      href={`/ledger/${ledger.Year}/${ledger.Month}`}>
-              {`${ledger.Year} ${monthName(ledger.Month)}`}
-          </ListboxItem>
-        )}
-      </Listbox>
+      <ListBox aria-label="Monthly ledger list">
+        <Label>Monthly ledger list</Label>
+        <Collection items={filteredLedgers}>
+          {(ledger) => (
+            <ListBox.Item id={ledger._id.toString()} textValue={`${ledger.Year} ${monthName(ledger.Month)}`}>
+                <NextLink href={`/ledger/${ledger.Year}/${ledger.Month}`}
+                        className={`${ghostButtonStyle}`}>
+                  {`${ledger.Year} ${monthName(ledger.Month)}`}
+                </NextLink>
+            </ListBox.Item>
+          )}
+        </Collection>
+      </ListBox>
     </div>
   )
 }
