@@ -27,9 +27,6 @@
         "./src/*"
       ]
     },
-    "types": [
-      "@serwist/next/typings"
-    ],
     "target": "ES2017"
   },
   "include": [

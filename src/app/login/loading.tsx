@@ -1,14 +1,15 @@
 'use client'
-import {CircularProgress} from "@heroui/react";
+import {ProgressCircle} from "@heroui/react";
 
 function loadingLogin() {
   return (
     <div className="w-full h-screen content-center justify-center align-middle">
-      <CircularProgress classNames={{
-          svg: 'w-1/2 h-1/2 mx-auto',
-          base: 'mx-auto'
-        }}
-        size="lg" aria-label="Loading..." />
+      <ProgressCircle aria-label="Loading" size="lg">
+        <ProgressCircle.Track className="w-1/2 h-1/2 mx-auto">
+          <ProgressCircle.TrackCircle />
+          <ProgressCircle.FillCircle />
+        </ProgressCircle.Track>
+      </ProgressCircle>
     </div>
   )
 }
