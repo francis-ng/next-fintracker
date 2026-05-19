@@ -1,6 +1,6 @@
-import { betterAuth, Auth } from "better-auth"
+import { betterAuth } from "better-auth"
 
-export const auth: Auth = betterAuth({
+export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   session: {
     cookieCache: {
