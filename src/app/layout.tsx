@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import Header from "../components/header";
+import RegisterSW from "../components/RegisterSW";
 
 const APP_NAME = 'Next FinTracker';
 const APP_DEFAULT_TITLE = 'NextFinTracker';
@@ -20,9 +21,8 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
-    title: APP_DEFAULT_TITLE,
-    startupImage: '/icons/apple-touch-icon.png'
+    statusBarStyle: 'black-translucent',
+    title: APP_DEFAULT_TITLE
   },
   formatDetection: {
     telephone: false
@@ -61,7 +61,7 @@ export default function RootLayout({
         <body className={`${inter.className}`}>
           <Providers>
             <Header />
-            {children}
+            <RegisterSW>{children}</RegisterSW>
           </Providers>
         </body>
       </html>
