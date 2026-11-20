@@ -9,7 +9,7 @@ export function SignIn() {
   return (
     <Button variant='primary' className="w-full"
       onPress={async () => await authClient.signIn.social({ provider: 'github' })}>
-        <Icon icon="mdi:github" />
+        <Icon icon="lucide:github" />
         Sign in with Github
     </Button>
   )
