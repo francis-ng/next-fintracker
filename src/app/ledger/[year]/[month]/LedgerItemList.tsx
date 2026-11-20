@@ -16,12 +16,12 @@ function LedgerItemList({items, ledgerType, dispatcher}: LedgerItemListProps) {
     <div>
       {
         items.map((item, i) =>
-          <div key={i} className="grid grid-cols-[82%_8%_8%] gap-2 md:flex my-1 mb-4">
-            <TextField className="order-1 md:basis-3/4 md:order-1 me-2" aria-label="Item" >
+          <div key={i} className="grid grid-cols-[auto_45px_45px] gap-2 md:flex my-1 mb-4 place-items-center">
+            <TextField className="order-1 md:order-1 w-full" aria-label="Item" >
               <Input value={item.Label} placeholder="Item"
                 onChange={(e) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Label', value:e.target.value})} />
             </TextField>
-            <div className="order-4 md:basis-1/4 md:order-2 md:w-48 flex items-center gap-2">
+            <div className="order-4 md:order-2 md:w-60 flex items-center gap-2 w-full">
               <NumberField className="grow" aria-label="Amount" value={item.Amount}
                   onChange={(value) => dispatcher({type:'UPDATE', book:ledgerType, index:i, field:'Amount', value:value})}>
                 <NumberField.Group>
