@@ -73,7 +73,7 @@ function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedg
         <Link href='/ledger/list'>
           <Button variant='tertiary' className='w-24'
                   aria-label='Back'>
-            <Icon icon="iconamoon:arrow-left-2-thin" width={24} height={24} />
+            <Icon icon="lucide:chevron-left" width={24} height={24} />
             Back
           </Button>
         </Link>
@@ -82,7 +82,7 @@ function LedgerDetails({ledgerPromise}: {ledgerPromise: Promise<SerializableLedg
                 onPress={() => save()} aria-label='Save'>
           {({isPending}) => (
             <>
-              <Icon icon="pepicons-pencil:cloud-up" width={24} height={24} />
+              <Icon icon="lucide:cloud-upload" width={24} height={24} />
               {isPending ? "Saving..." : "Save"}
               {isPending ? <Spinner color="current" size="sm" /> : null}
             </>

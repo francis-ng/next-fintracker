@@ -71,7 +71,7 @@ function ListClient({ledgersPromise}: {ledgersPromise: Promise<SerializableLedge
       <div className='flex p-1 mb-2'>
         <NextLink href={nextLedgerLink()}
                 className={`me-1 ${secondaryButtonStyle}`} aria-label='New'>
-          <Icon icon="mdi-light:plus" width={24} height={24}/>
+          <Icon icon="lucide:plus" width={24} height={24}/>
           New
         </NextLink>
         <NextLink href={`/ledger/0/0`}
