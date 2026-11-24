@@ -12,9 +12,9 @@ type PadKey = {
   text?: string
 };
 const PAD_KEYS: PadKey[] = [
-  { key: '1' }, { key: '2' }, { key: '3' }, { key: 'backspace', label: 'Backspace', icon: 'lucide:delete' },
+  { key: '7' }, { key: '8' }, { key: '9' }, { key: 'backspace', label: 'Backspace', icon: 'lucide:delete' },
   { key: '4' }, { key: '5' }, { key: '6' }, { key: 'clear', label: 'Clear', text: 'C' },
-  { key: '7' }, { key: '8' }, { key: '9' }, { key: '.', label: 'Decimal point', text: '.' },
+  { key: '1' }, { key: '2' }, { key: '3' }, { key: '.', label: 'Decimal point', text: '.' },
 ] as const;
 
 interface NumberpadProps {
